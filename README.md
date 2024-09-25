@@ -1,14 +1,30 @@
+# 1. 安装 Node.js 和 npm
+# 访问 https://nodejs.org 下载并安装适合您系统的版本
+
+# 验证安装
+node --version
+npm --version
+
+
 1. 设置Vue项目
 
 首先,我们需要创建一个新的Vue项目。假设您已经安装了Node.js和npm,请在终端中运行以下命令:
 npm install -g @vue/cli
-vue create ProShowVue3
-cd ProShowVue3
+
+<!-- 临时更改执行策略 -->
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+<!-- b) 永久更改执行策略(小心) -->
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+<!-- 不想更改执行策略，可以尝试直接使用Node.js运行Vue CLI -->
+
+vue create web-proshow
+cd web-proshow
 npm run serve
 
 2.创建基本结构
 在src/components目录下创建以下组件:
 
+注意名字不能为单英文单词
 Header.vue
 Footer.vue
 HomePage.vue
