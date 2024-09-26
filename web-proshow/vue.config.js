@@ -3,35 +3,27 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
-    port: 7777,
-    // disableHostCheck: true,
+    port: process.env.VUE_APP_PORT || 7777,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:7778',  // 使用 IP 地址而不是 localhost
-        // target: 'http://0156.227.235.202:7778',
+        target: process.env.VUE_APP_API_URL || 'http://127.0.0.1:7778',
         changeOrigin: true
       },
       '/static': {
-        target: 'http://127.0.0.1:7778',  // 同样更新这里
-        // target: 'http://0.0.0.0:7778',  // 同样更新这里        
-        // target: 'http://156.227.235.202:7778',  // 同样更新这里
+        target: process.env.VUE_APP_STATIC_URL || 'http://127.0.0.1:7778',
         changeOrigin: true
       }
     }
   }
-  
 })
 
-// module.exports = {
-//   transpileDependencies: true,
-//   devServer: {
-//     port: 3000,
-//     proxy: {
-//       '/api': {
-//         target: 'http://localhost:5000',
-//         changeOrigin: true,
-//         ws: true,
-//       }
-//     }
-//   }
-// }
+
+// 开发环境: npm run serve
+// 生产环境服务: npm run serve:prod
+// 构建测试环境: npm run build:staging
+// 构建生产环境: npm run build:prod
+// 这样，您就可以轻松地在不同环境之间切换，而无需手动更改配置文件。如果您需要进一步的帮助或有任何问题，请随时告诉我。
+
+
+
+
