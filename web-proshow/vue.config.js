@@ -3,15 +3,15 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
-    port: 3000,
+    port: 7777,
     // disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:5000',  // 使用 IP 地址而不是 localhost
+        target: 'http://127.0.0.1:7778',  // 使用 IP 地址而不是 localhost
         changeOrigin: true
       },
       '/static': {
-        target: 'http://127.0.0.1:5000',  // 同样更新这里
+        target: 'http://127.0.0.1:7778',  // 同样更新这里
         changeOrigin: true
       }
     }
