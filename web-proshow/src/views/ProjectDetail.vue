@@ -4,13 +4,16 @@
     <div class="project-content">
       <div class="media-container">
         <div v-if="project.type === 'image'" class="image-carousel">
-          <img 
-            v-for="(image, index) in project.media" 
-            :key="index"
-            :src="image" 
-            :alt="`${project.title} - Image ${index + 1}`"
-            v-show="index === currentImageIndex"
-          >
+          <transition-group name="fade">
+            <img 
+              v-for="(image, index) in project.media" 
+              :key="image"
+              :src="image" 
+              :alt="`${project.title} - Image ${index + 1}`"
+              v-if="index === currentImageIndex"
+              class="carousel-image"
+            >
+          </transition-group>
           <div class="carousel-controls" v-if="project.media.length > 1">
             <button @click="prevImage" class="carousel-button">
               &lt;
@@ -116,15 +119,13 @@ h1 {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.image-carousel img {
+.carousel-image {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 1;
-  transition: opacity 0.5s ease-in-out;
 }
 
 .carousel-controls {
@@ -132,6 +133,7 @@ h1 {
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
 }
 
 .carousel-button {
@@ -208,5 +210,12 @@ h1 {
 
 .project-description p {
   margin-bottom: 1rem;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
