@@ -6,14 +6,15 @@
         <div v-if="project.type === 'image'" class="image-carousel">
           <transition-group name="fade">
             <img 
-              v-for="image in currentImages" 
-              :key="image"
+              v-for="(image, index) in project.media" 
+              :key="index"
               :src="image" 
-              :alt="`${project.title} - Image`"
+              :alt="`${project.title} - Image ${index + 1}`"
               class="carousel-image"
+              v-show="index === currentImageIndex"
             >
           </transition-group>
-          <div class="carousel-controls" v-if="project.media.length > 1">
+          <div class="carousel-controls" v-if="project.media && project.media.length > 1">
             <button @click="prevImage" class="carousel-button">
               &lt;
               <span class="click-feedback"></span>
@@ -54,14 +55,6 @@ export default {
       currentImageIndex: 0
     }
   },
-  computed: {
-    currentImages() {
-      if (this.project && this.project.media) {
-        return [this.project.media[this.currentImageIndex]];
-      }
-      return [];
-    }
-  },
   mounted() {
     console.log('Component mounted');
     this.loadProjectData();
@@ -73,20 +66,26 @@ export default {
         const response = await axios.get(`/api/projects/${this.$route.params.id}`);
         this.project = response.data;
         console.log('Project data loaded:', this.project);
-        console.log('Number of media items:', this.project.media.length);
+        if (this.project.media) {
+          console.log('Number of media items:', this.project.media.length);
+        }
       } catch (error) {
         console.error('Error fetching project data:', error);
       }
     },
     nextImage() {
-      console.log('Next image called');
-      this.currentImageIndex = (this.currentImageIndex + 1) % this.project.media.length;
-      console.log('New index:', this.currentImageIndex);
+      if (this.project && this.project.media && this.project.media.length > 1) {
+        console.log('Next image called');
+        this.currentImageIndex = (this.currentImageIndex + 1) % this.project.media.length;
+        console.log('New index:', this.currentImageIndex);
+      }
     },
     prevImage() {
-      console.log('Previous image called');
-      this.currentImageIndex = (this.currentImageIndex - 1 + this.project.media.length) % this.project.media.length;
-      console.log('New index:', this.currentImageIndex);
+      if (this.project && this.project.media && this.project.media.length > 1) {
+        console.log('Previous image called');
+        this.currentImageIndex = (this.currentImageIndex - 1 + this.project.media.length) % this.project.media.length;
+        console.log('New index:', this.currentImageIndex);
+      }
     }
   }
 }
