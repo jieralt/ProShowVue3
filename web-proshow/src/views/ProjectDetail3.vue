@@ -9,17 +9,11 @@
             :key="index"
             :src="image" 
             :alt="`${project.title} - Image ${index + 1}`"
-            v-show="index === currentImageIndex"
+            :class="{ active: index === currentImageIndex }"
           >
           <div class="carousel-controls" v-if="project.media.length > 1">
-            <button @click="prevImage" class="carousel-button">
-              &lt;
-              <span class="click-feedback"></span>
-            </button>
-            <button @click="nextImage" class="carousel-button">
-              &gt;
-              <span class="click-feedback"></span>
-            </button>
+            <button @click="prevImage">&lt;</button>
+            <button @click="nextImage">&gt;</button>
           </div>
         </div>
         <video v-else-if="project.type === 'video'" controls>
@@ -52,31 +46,20 @@ export default {
       currentImageIndex: 0
     }
   },
-  mounted() {
-    console.log('Component mounted');
-    this.loadProjectData();
+  async created() {
+    try {
+      const response = await axios.get(`/api/projects/${this.$route.params.id}`);
+      this.project = response.data;
+    } catch (error) {
+      console.error('Error fetching project data:', error);
+    }
   },
   methods: {
-    async loadProjectData() {
-      try {
-        console.log('Fetching project data...');
-        const response = await axios.get(`/api/projects/${this.$route.params.id}`);
-        this.project = response.data;
-        console.log('Project data loaded:', this.project);
-        console.log('Number of media items:', this.project.media.length);
-      } catch (error) {
-        console.error('Error fetching project data:', error);
-      }
-    },
     nextImage() {
-      console.log('Next image called');
       this.currentImageIndex = (this.currentImageIndex + 1) % this.project.media.length;
-      console.log('New index:', this.currentImageIndex);
     },
     prevImage() {
-      console.log('Previous image called');
       this.currentImageIndex = (this.currentImageIndex - 1 + this.project.media.length) % this.project.media.length;
-      console.log('New index:', this.currentImageIndex);
     }
   }
 }
@@ -123,8 +106,12 @@ h1 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 0.5s ease-in-out;
+}
+
+.image-carousel img.active {
+  opacity: 1;
 }
 
 .carousel-controls {
@@ -134,7 +121,7 @@ h1 {
   transform: translateX(-50%);
 }
 
-.carousel-button {
+.carousel-controls button {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
@@ -142,25 +129,6 @@ h1 {
   margin: 0 5px;
   cursor: pointer;
   border-radius: 5px;
-  position: relative;
-  overflow: hidden;
-}
-
-.click-feedback {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s;
-}
-
-.carousel-button:active .click-feedback {
-  width: 100px;
-  height: 100px;
 }
 
 .project-info {
