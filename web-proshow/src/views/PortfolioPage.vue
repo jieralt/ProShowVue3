@@ -4,11 +4,11 @@
     <div class="filters">
       <button 
         v-for="category in categories" 
-        :key="category"
-        @click="currentCategory = category"
-        :class="{ active: currentCategory === category }"
+        :key="category.value"
+        @click="currentCategory = category.value"
+        :class="{ active: currentCategory === category.value }"
       >
-        {{ category }}
+        {{ category.label }}
       </button>
     </div>
     <div class="projects">
@@ -36,7 +36,7 @@
           <div class="tech-tags">
             <span v-for="tech in project.technologies.slice(0, 3)" :key="tech" class="tech-tag">{{ tech }}</span>
           </div>
-          <router-link :to="{ name: 'ProjectDetail', params: { id: project.id } }" class="view-project">
+          <router-link :to="{ name: 'ProjectDetail', params: { id: project.id, category: project.category } }" class="view-project">
             查看项目
           </router-link>
         </div>
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       currentCategory: '全部',
-      categories: ['全部'],
+      categories: [{ value: '全部', label: '全部' }],
       projects: [],
       currentImageIndices: {}
     }
@@ -61,8 +61,18 @@ export default {
   async created() {
     try {
       const response = await axios.get('/api/projects');
-      this.projects = response.data;
-      this.categories = ['全部', ...new Set(this.projects.map(p => p.category))];
+      this.projects = response.data.map(project => ({
+        ...project,
+        media: Array.isArray(project.media) ? project.media : [project.media]
+      }));
+      const uniqueCategories = new Set(this.projects.map(p => p.category));
+      this.categories = [
+        { value: '全部', label: '全部' },
+        ...Array.from(uniqueCategories).map(category => ({
+          value: category,
+          label: this.projects.find(p => p.category === category).categoryLabel || category
+        }))
+      ];
       this.projects.forEach(project => {
         this.currentImageIndices[project.id] = 0;
       });

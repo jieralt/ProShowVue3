@@ -9,7 +9,12 @@ const routes = [
   { path: '/', name: 'HomeMe', component: Home },
   { path: '/about', name: 'AboutMe', component: About },
   { path: '/portfolio', name: 'Portfolio', component: PortfolioPage },
-  { path: '/project/:id', name: 'ProjectDetail', component: ProjectDetail },
+  { 
+    path: '/project/:category/:id', 
+    name: 'ProjectDetail', 
+    component: ProjectDetail,
+    props: true  // 这允许路由参数作为props传递给组件
+  },
   { path: '/contact', name: 'ContactMe', component: Contact }
 ]
 
@@ -17,7 +22,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
-
 
 export default router
