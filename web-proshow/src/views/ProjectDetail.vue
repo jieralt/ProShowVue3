@@ -6,11 +6,10 @@
         <div v-if="project.type === 'image'" class="image-carousel">
           <transition-group name="fade">
             <img 
-              v-for="(image, index) in project.media" 
+              v-for="image in currentImages" 
               :key="image"
               :src="image" 
-              :alt="`${project.title} - Image ${index + 1}`"
-              v-if="index === currentImageIndex"
+              :alt="`${project.title} - Image`"
               class="carousel-image"
             >
           </transition-group>
@@ -53,6 +52,14 @@ export default {
     return {
       project: null,
       currentImageIndex: 0
+    }
+  },
+  computed: {
+    currentImages() {
+      if (this.project && this.project.media) {
+        return [this.project.media[this.currentImageIndex]];
+      }
+      return [];
     }
   },
   mounted() {
