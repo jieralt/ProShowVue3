@@ -4,6 +4,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     port: 3000,
+    // disableHostCheck: true,
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:5000',  // 使用 IP 地址而不是 localhost

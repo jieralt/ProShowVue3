@@ -3,21 +3,9 @@
     <h1>{{ project.title }}</h1>
     <div class="project-content">
       <div class="media-container">
-        <div v-if="project.type === 'image'" class="image-carousel">
-          <img 
-            v-for="(image, index) in project.media" 
-            :key="index"
-            :src="image" 
-            :alt="`${project.title} - Image ${index + 1}`"
-            :class="{ active: index === currentImageIndex }"
-          >
-          <div class="carousel-controls" v-if="project.media.length > 1">
-            <button @click="prevImage">&lt;</button>
-            <button @click="nextImage">&gt;</button>
-          </div>
-        </div>
+        <img v-if="project.type === 'image'" :src="project.media" :alt="project.title">
         <video v-else-if="project.type === 'video'" controls>
-          <source :src="project.media[0]" type="video/mp4">
+          <source :src="project.media" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
@@ -42,8 +30,7 @@ export default {
   name: 'ProjectDetail',
   data() {
     return {
-      project: null,
-      currentImageIndex: 0
+      project: null
     }
   },
   async created() {
@@ -52,14 +39,6 @@ export default {
       this.project = response.data;
     } catch (error) {
       console.error('Error fetching project data:', error);
-    }
-  },
-  methods: {
-    nextImage() {
-      this.currentImageIndex = (this.currentImageIndex + 1) % this.project.media.length;
-    },
-    prevImage() {
-      this.currentImageIndex = (this.currentImageIndex - 1 + this.project.media.length) % this.project.media.length;
     }
   }
 }
@@ -90,45 +69,11 @@ h1 {
   flex: 1;
 }
 
-.image-carousel {
-  position: relative;
+.media-container img,
+.media-container video {
   width: 100%;
-  height: 400px;
-  overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.image-carousel img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.image-carousel img.active {
-  opacity: 1;
-}
-
-.carousel-controls {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.carousel-controls button {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
-  border-radius: 5px;
 }
 
 .project-info {

@@ -17,19 +17,7 @@
         :key="project.id" 
         class="project-card"
       >
-        <div class="image-carousel">
-          <img 
-            v-for="(image, index) in project.media" 
-            :key="index"
-            :src="image" 
-            :alt="project.title"
-            :class="{ active: index === currentImageIndices[project.id] }"
-          >
-          <div class="carousel-controls" v-if="project.media.length > 1">
-            <button @click="prevImage(project.id)">&lt;</button>
-            <button @click="nextImage(project.id)">&gt;</button>
-          </div>
-        </div>
+        <img :src="project.media" :alt="project.title">
         <div class="project-info">
           <h3>{{ project.title }}</h3>
           <p>{{ project.shortDescription }}</p>
@@ -54,8 +42,7 @@ export default {
     return {
       currentCategory: '全部',
       categories: ['全部'],
-      projects: [],
-      currentImageIndices: {}
+      projects: []
     }
   },
   async created() {
@@ -63,9 +50,6 @@ export default {
       const response = await axios.get('/api/projects');
       this.projects = response.data;
       this.categories = ['全部', ...new Set(this.projects.map(p => p.category))];
-      this.projects.forEach(project => {
-        this.currentImageIndices[project.id] = 0;
-      });
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -76,16 +60,6 @@ export default {
         return this.projects;
       }
       return this.projects.filter(project => project.category === this.currentCategory);
-    }
-  },
-  methods: {
-    nextImage(projectId) {
-      const project = this.projects.find(p => p.id === projectId);
-      this.currentImageIndices[projectId] = (this.currentImageIndices[projectId] + 1) % project.media.length;
-    },
-    prevImage(projectId) {
-      const project = this.projects.find(p => p.id === projectId);
-      this.currentImageIndices[projectId] = (this.currentImageIndices[projectId] - 1 + project.media.length) % project.media.length;
     }
   }
 }
@@ -145,42 +119,10 @@ export default {
   transform: translateY(-5px);
 }
 
-.image-carousel {
-  position: relative;
+.project-card img {
   width: 100%;
   height: 200px;
-  overflow: hidden;
-}
-
-.image-carousel img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.image-carousel img.active {
-  opacity: 1;
-}
-
-.carousel-controls {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.carousel-controls button {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  margin: 0 5px;
-  cursor: pointer;
 }
 
 .project-info {
