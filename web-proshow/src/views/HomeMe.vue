@@ -19,7 +19,7 @@
         <i class="fab fa-node" title="Node.js"></i>
       </div>
     </div>
-    <div class="featured-work">
+    <!-- <div class="featured-work">
       <h2>精选作品</h2>
       <div class="work-grid">
         <div class="work-item" v-for="work in featuredWorks" :key="work.id">
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -55,7 +55,8 @@ export default {
 }
 
 .hero {
-  height: 100vh;
+  height: 50vh;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
