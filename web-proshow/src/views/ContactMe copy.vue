@@ -15,9 +15,7 @@
           <label for="message">消息</label>
           <textarea id="message" v-model="form.message" required></textarea>
         </div>
-        <button type="submit" class="submit-btn" :disabled="sending">
-          {{ sending ? '发送中...' : '发送消息' }}
-        </button>
+        <button type="submit" class="submit-btn">发送消息</button>
       </form>
       <div class="contact-info">
         <h2>联系方式</h2>
@@ -35,8 +33,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'ContactMe',
   data() {
@@ -45,27 +41,17 @@ export default {
         name: '',
         email: '',
         message: ''
-      },
-      sending: false
+      }
     }
   },
   methods: {
-    async submitForm() {
-      this.sending = true;
-      try {
-        const response = await axios.post('http://localhost:7778/api/send-email', this.form);
-        if (response.data.success) {
-          alert('消息已发送！');
-          this.form = { name: '', email: '', message: '' };
-        } else {
-          alert('发送失败，请稍后再试。');
-        }
-      } catch (error) {
-        console.error('Error sending email:', error);
-        alert('发送失败，请稍后再试。');
-      } finally {
-        this.sending = false;
-      }
+    submitForm() {
+      // 这里添加表单提交逻辑
+      console.log('Form submitted:', this.form);
+      // 重置表单
+      this.form = { name: '', email: '', message: '' };
+      // 显示成功消息（在实际应用中，您可能想使用一个更优雅的通知系统）
+      alert('消息已发送！');
     }
   }
 }
@@ -120,11 +106,6 @@ textarea {
 
 .submit-btn:hover {
   background-color: #2980b9;
-}
-
-.submit-btn:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
 }
 
 .contact-info {
