@@ -7,7 +7,10 @@ module.exports = defineConfig({
     proxy: {
       '/api': {
         target: process.env.VUE_APP_API_URL || 'http://127.0.0.1:7778',
-        changeOrigin: true
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/api'  // 这行确保 /api 前缀被保留
+        }
       },
       '/static': {
         target: process.env.VUE_APP_STATIC_URL || 'http://127.0.0.1:7778',
@@ -16,7 +19,6 @@ module.exports = defineConfig({
     }
   }
 })
-
 
 // 开发环境: npm run serve
 // 生产环境服务: npm run serve:prod
