@@ -53,7 +53,7 @@ export default {
     async submitForm() {
       this.sending = true;
       try {
-        const response = await axios.post('http://localhost:7778/api/send-email', this.form);
+        const response = await axios.post('http://127.0.0.1:7778/api/send-email', this.form);
         if (response.data.success) {
           alert('消息已发送！');
           this.form = { name: '', email: '', message: '' };
