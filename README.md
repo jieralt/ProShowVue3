@@ -7,6 +7,12 @@ python.exe app.py;
 ## 前端
 cd ProShowVue3; cd web-proshow; npm run serve;
 npm run serve
+## 远程
+git config --global --add safe.directory /www/wwwroot/ProShowFlask
+cd /www/wwwroot/ProShowFlask && git pull
+cd /www/wwwroot/ProShowVue3 && git pull
+git checkout -- web-proshow/package-lock.json
+git pull
 
 # 1. 安装 Node.js 和 npm
 # 访问 https://nodejs.org 下载并安装适合您系统的版本
@@ -51,4 +57,6 @@ npm install vue-router
 flask 远程接口
 npm install axios
 
+# 引入图标依赖
+npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/vue-fontawesome
 
