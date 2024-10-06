@@ -2,60 +2,41 @@
   <div class="project-detail" v-if="project">
     <h1>{{ project.title }}</h1>
     <div class="project-content">
-      <div class="left-column">
-        <div class="media-container">
-          <div v-if="project.type === 'image'" class="image-carousel">
-            <transition-group name="fade">
-              <img 
-                v-for="(image, index) in project.media" 
-                :key="index"
-                :src="image" 
-                :alt="`${project.title} - Image ${index + 1}`"
-                class="carousel-image"
-                v-show="index === currentImageIndex"
-              >
-            </transition-group>
-            <div class="carousel-controls" v-if="project.media && project.media.length > 1">
-              <button @click="prevImage" class="carousel-button prev">
-                &lt;
-              </button>
-              <button @click="nextImage" class="carousel-button next">
-                &gt;
-              </button>
-            </div>
-            <div class="carousel-indicators" v-if="project.media && project.media.length > 1">
-              <span 
-                v-for="(_, index) in project.media" 
-                :key="index" 
-                :class="['indicator', { active: index === currentImageIndex }]"
-                @click="setCurrentImage(index)"
-              ></span>
-            </div>
-          </div>
-          <video v-else-if="project.type === 'video'" controls>
-            <source :src="project.media[0]" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        
-        <!-- 源文件下载部分 -->
-        <div v-if="project.sourceFiles && project.sourceFiles.length > 0" class="source-files">
-          <h3>项目源文件</h3>
-          <div class="download-buttons">
-            <a 
-              v-for="(file, index) in project.sourceFiles" 
-              :key="index" 
-              @click.prevent="downloadFile(file)"
-              href="#"
-              class="download-button"
+      <div class="media-container">
+        <div v-if="project.type === 'image'" class="image-carousel">
+          <transition-group name="fade">
+            <img 
+              v-for="(image, index) in project.media" 
+              :key="index"
+              :src="image" 
+              :alt="`${project.title} - Image ${index + 1}`"
+              class="carousel-image"
+              v-show="index === currentImageIndex"
             >
-              <font-awesome-icon icon="download" /> {{ file.name }}
-            </a>
+          </transition-group>
+          <div class="carousel-controls" v-if="project.media && project.media.length > 1">
+            <button @click="prevImage" class="carousel-button prev">
+              &lt;
+            </button>
+            <button @click="nextImage" class="carousel-button next">
+              &gt;
+            </button>
+          </div>
+          <div class="carousel-indicators" v-if="project.media && project.media.length > 1">
+            <span 
+              v-for="(_, index) in project.media" 
+              :key="index" 
+              :class="['indicator', { active: index === currentImageIndex }]"
+              @click="setCurrentImage(index)"
+            ></span>
           </div>
         </div>
+        <video v-else-if="project.type === 'video'" controls>
+          <source :src="project.media[0]" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </div>
-      
-      <div class="right-column">
+      <div class="project-info">
         <div class="tech-tags">
           <span v-for="tech in project.technologies" :key="tech" class="tech-tag">{{ tech }}</span>
         </div>
@@ -95,48 +76,13 @@ export default {
         if (this.project.media && !Array.isArray(this.project.media)) {
           this.project.media = [this.project.media];
         }
-        // 处理 sourceFile 字段
-        if (this.project.sourceFile) {
-          this.project.sourceFiles = Array.isArray(this.project.sourceFile) 
-            ? this.project.sourceFile.map(this.processSourceFile)
-            : [this.processSourceFile(this.project.sourceFile)];
-        }
         console.log('Project data loaded:', this.project);
-        if (this.project.media && this.project.media.length > 1) {
+        if (this.project.media) {
           console.log('Number of media items:', this.project.media.length);
           this.startAutoplay();
         }
       } catch (error) {
         console.error('Error fetching project data:', error);
-      }
-    },
-    processSourceFile(file) {
-      if (typeof file === 'string') {
-        return {
-          name: this.getFileName(file),
-          path: file
-        };
-      }
-      return file;
-    },
-    getFileName(path) {
-      return path.split('/').pop();
-    },
-    async downloadFile(file) {
-      try {
-        const response = await axios.get(`/api/download/${file.path}`, {
-          responseType: 'blob'
-        });
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', file.name);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error('Error downloading file:', error);
-        alert('文件下载失败，请稍后再试。');
       }
     },
     nextImage() {
@@ -193,27 +139,21 @@ h1 {
 }
 
 .project-content {
-  display: grid;
-  grid-template-columns: minmax(300px, 2fr) 3fr;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
-}
-
-.left-column {
-  position: sticky;
-  top: 2rem;
-  align-self: start;
+  margin-bottom: 2rem;
 }
 
 .media-container {
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 .image-carousel {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 75%; /* 4:3 aspect ratio */
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -280,9 +220,8 @@ h1 {
   background-color: white;
 }
 
-.right-column {
-  overflow-y: auto;
-  max-height: calc(100vh - 4rem);
+.project-info {
+  flex: 1;
 }
 
 .tech-tags {
@@ -335,53 +274,17 @@ h1 {
   opacity: 0;
 }
 
-.source-files {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-}
-
-.source-files h3 {
-  margin-bottom: 1rem;
-}
-
-.download-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.download-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.download-button:hover {
-  background-color: #0056b3;
-}
-
-.download-button svg {
-  margin-right: 0.5rem;
-}
-
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .project-content {
-    grid-template-columns: 1fr;
+    flex-direction: row;
   }
 
-  .left-column {
-    position: static;
+  .media-container {
+    flex: 1;
   }
 
-  .right-column {
-    max-height: none;
+  .project-info {
+    flex: 1;
   }
 }
 </style>

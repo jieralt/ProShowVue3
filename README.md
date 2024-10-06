@@ -1,3 +1,13 @@
+# 0. 一键启动
+添加环境变量：
+[System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\Administrator\AppData\Local\Programs\Python\Python312", [System.EnvironmentVariableTarget]::Machine)
+## 后端
+cd ..; cd ProShowFlask; python.exe app.py;
+python.exe app.py;
+## 前端
+cd ProShowVue3; cd web-proshow; npm run serve;
+npm run serve
+
 # 1. 安装 Node.js 和 npm
 # 访问 https://nodejs.org 下载并安装适合您系统的版本
 
