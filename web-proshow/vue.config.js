@@ -2,6 +2,19 @@ const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  chainWebpack: (config) => {
+    config.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif|svg|ico)(\?.*)?$/)
+      .use('url-loader')
+      .loader('url-loader')
+      .tap((options) => {
+        return {
+          ...options,
+          limit: 8192, // 小于 8192 字节的图片会以 base64 的形式嵌入
+        };
+      });
+  },
   devServer: {
     port: process.env.VUE_APP_PORT || 7777,
     proxy: {
@@ -19,6 +32,8 @@ module.exports = defineConfig({
     }
   }
 })
+
+
 
 // 开发环境: npm run serve
 // 生产环境服务: npm run serve:prod

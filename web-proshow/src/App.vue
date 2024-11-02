@@ -31,11 +31,41 @@
         </a>
         <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
         <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+        
+        <!-- <a href="https://space.bilibili.com/108668819" target="_blank" rel="noopener noreferrer"><i class="fab fa-bilibili"></i></a> -->
+        
+        <!-- <a href="https://space.bilibili.com/108668819" target="_blank" rel="noopener noreferrer">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Bilibili_icon.svg" alt="Bilibili" class="custom-icon">
+        </a>
+
+        <a href="https://www.douyu.com/yourusername" target="_blank" rel="noopener noreferrer">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/DouyuTV_Logo.svg" alt="Douyu" class="custom-icon">
+        </a>
+        <a href="https://www.zhihu.com/people/yourusername" target="_blank" rel="noopener noreferrer"><i class="fab fa-zhihu"></i></a> -->
+
       </div>
       <p>&copy; {{ currentYear }} Jieralt. All rights reserved.</p>
     </footer>
   </div>
 </template>
+
+<!-- <script>
+export default {
+  data() {
+    return {
+      currentYear: new Date().getFullYear()
+    };
+  }
+};
+</script> -->
+
+<style>
+.social-links a {
+  margin: 0 8px;
+  color: inherit;
+  text-decoration: none;
+}
+</style>
 
 <script>
 export default {
