@@ -1,4 +1,13 @@
 # 0. 一键启动
+cd ProShowFlask 
+python.exe app.py
+cd ProShowVue3
+cd web-proshow
+npm run serve
+
+
+
+
 添加环境变量：
 [System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\Administrator\AppData\Local\Programs\Python\Python312", [System.EnvironmentVariableTarget]::Machine)
 ## 后端
